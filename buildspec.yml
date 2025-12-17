@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "=== Installing PHP 8.1 ==="
+      - yum install -y https://rpms.remirepo.net/enterprise/remi-release-7.rpm yum-utils
+      - yum remove -y libzip
+      - yum install -y ncurses-compat-libs httpd
+      - yum install -y --disablerepo=amzn2-core --enablerepo=remi-php81 php php-cli php-common php-json php-mbstring php-xml php-zip php-curl
+      - rm -f /root/.phpenv/shims/php
+      - export PATH="/usr/bin:$PATH"
+      - php --version
+      
+  pre_build:
+    commands:
+      - echo "=== Installing Composer ==="
+      - export PATH="/usr/bin:$PATH"
+      - export HOME=/root
+      - curl -sS https://getcomposer.org/installer | php
+      - mv composer.phar /usr/local/bin/composer && chmod +x /usr/local/bin/composer
+      - composer --version
+      
+  build:
+    commands:
+      - echo "=== Building Application ==="
+      - export PATH="/usr/bin:$PATH"
+      - export HOME=/root
+      - php --version
+      - composer install --no-dev --optimize-autoloader
+
+artifacts:
+  files:
+    - '**/*'
