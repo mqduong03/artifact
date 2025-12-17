@@ -8,6 +8,10 @@ phases:
   install:
     runtime-versions:
       php: 8.1.29
+    commands:
+      - echo "Checking Operating System"
+      - cat /etc/os-release
+      - uname -a
       
   pre_build:
     commands:
